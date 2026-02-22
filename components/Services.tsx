@@ -31,18 +31,18 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description, onDetailsClick }) => (
-    <div className="bg-white p-8 border border-gray-200 h-full flex flex-col hover:shadow-lg transition-shadow duration-300">
-        <div className="mb-6">
+    <div className="bg-neutral-100 p-8 h-full flex flex-col group border-2 border-transparent hover:border-yellow-400 transition-all duration-300">
+        <div className="mb-6 text-yellow-400">
             {icon}
         </div>
-        <h3 className="text-xl font-bold mb-3">{title}</h3>
+        <h3 className="text-xl font-bold mb-3 text-black">{title}</h3>
         <p className="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">{description}</p>
         
         <button 
             onClick={onDetailsClick} 
-            className="mt-auto text-xs font-bold uppercase tracking-wider text-black text-left hover:underline hover:text-yellow-600"
+            className="mt-auto text-xs font-bold uppercase tracking-wider text-black text-left group-hover:underline group-hover:text-yellow-600 transition-colors duration-300 flex items-center gap-2"
         >
-            Ver Detalhes →
+            Ver Detalhes <span className="transform transition-transform duration-300 group-hover:translate-x-1">→</span>
         </button>
     </div>
 );
@@ -79,13 +79,13 @@ const Services: React.FC<ServicesProps> = ({ onContactClick }) => {
 
     return (
         <>
-        <section id="servicos" className="py-24 px-6 bg-white">
+        <section id="servicos" className="py-24 px-6 bg-neutral-50">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
-                     <h2 className="text-3xl font-bold mb-3">Serviços de Precisão</h2>
+                     <h2 className="text-3xl font-bold mb-3 text-black">Serviços de Precisão</h2>
                      <p className="text-gray-600 max-w-2xl mx-auto">Do molde à peça final, garantimos qualidade e acabamentos de excelência que elevam o seu produto.</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {servicesData.map(service => (
                         <ServiceCard 
                             key={service.id}
@@ -95,9 +95,9 @@ const Services: React.FC<ServicesProps> = ({ onContactClick }) => {
                             onDetailsClick={() => setSelectedService(service)}
                         />
                     ))}
-                    <div className="bg-gray-50 p-8 h-full flex flex-col justify-center items-center text-center border border-dashed border-gray-300 hover:bg-gray-100 transition-colors">
-                        <h3 className="text-xl font-bold mb-3">Tem um Projeto Específico?</h3>
-                        <p className="text-gray-600 text-sm mb-6">A nossa equipa técnica está pronta para analisar os seus requisitos e propor a melhor solução.</p>
+                    <div className="bg-black p-8 h-full flex flex-col justify-center items-center text-center border-2 border-yellow-400/50 hover:border-yellow-400 transition-colors duration-300 lg:col-span-2">
+                        <h3 className="text-xl font-bold mb-3 text-white">Tem um Projeto Específico?</h3>
+                        <p className="text-gray-400 text-sm mb-6">A nossa equipa técnica está pronta para analisar os seus requisitos e propor a melhor solução.</p>
                         <button onClick={onContactClick} className="w-fit px-8 py-3 bg-yellow-400 text-black font-bold text-xs uppercase hover:bg-yellow-500 transition shadow-md">Fale Connosco</button>
                     </div>
                 </div>
@@ -105,7 +105,7 @@ const Services: React.FC<ServicesProps> = ({ onContactClick }) => {
         </section>
         <Modal isOpen={!!selectedService} onClose={() => setSelectedService(null)} size="lg">
             {selectedService && (
-                 <div>
+                 <div className="p-4">
                     <div className="aspect-video bg-gray-100 mb-6">
                         <img 
                             src={(selectedService as any).imageUrl || 'https://picsum.photos/seed/service/800/450'} 
@@ -115,10 +115,10 @@ const Services: React.FC<ServicesProps> = ({ onContactClick }) => {
                             decoding="async"
                         />
                     </div>
-                    <h2 className="text-2xl font-bold mb-2">{selectedService.title}</h2>
-                    <p className="text-gray-600 mb-6">{selectedService.detailedDescription}</p>
+                    <h2 className="text-2xl font-bold mb-2 text-black">{selectedService.title}</h2>
+                    <p className="text-gray-600 mb-6 leading-relaxed">{selectedService.detailedDescription}</p>
                     
-                    <div className="bg-white/30 backdrop-blur-md border border-gray-200/50 p-6 space-y-4 text-sm">
+                    <div className="bg-neutral-100 border border-neutral-200 p-6 space-y-4 text-sm">
                         <div>
                             <h4 className="font-semibold uppercase tracking-wider mb-2 text-gray-500">Aplicações Comuns</h4>
                             <p className="text-gray-700">{selectedService.applications.join(', ')}.</p>

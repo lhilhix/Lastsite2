@@ -35,23 +35,24 @@ const Products: React.FC = () => {
     return (
         <section id="produtos" className="py-24 bg-neutral-100">
             <div className="max-w-7xl mx-auto px-6">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold uppercase tracking-wider">Produtos em Destaque</h2>
-                    <p className="text-gray-500 mt-2 max-w-2xl mx-auto">Excelência técnica em cada componente produzido.</p>
-                    <div className="flex justify-center space-x-2 mt-6">
-                        <button onClick={() => scroll('left')} className="px-4 py-2 bg-white shadow-sm border border-gray-200 text-black hover:bg-gray-50 transition text-lg rounded-full">←</button>
-                        <button onClick={() => scroll('right')} className="px-4 py-2 bg-white shadow-sm border border-gray-200 text-black hover:bg-gray-50 transition text-lg rounded-full">→</button>
+                <div className="flex justify-between items-center mb-12">
+                    <div>
+                        <h2 className="text-3xl font-bold uppercase tracking-wider text-black">Produtos em Destaque</h2>
+                        <p className="text-gray-500 mt-2 max-w-2xl">Excelência técnica em cada componente produzido.</p>
+                    </div>
+                    <div className="flex space-x-2">
+                        <button onClick={() => scroll('left')} className="w-12 h-12 bg-white shadow-sm border border-gray-200 text-black hover:bg-gray-50 transition text-xl rounded-full flex items-center justify-center">‹</button>
+                        <button onClick={() => scroll('right')} className="w-12 h-12 bg-white shadow-sm border border-gray-200 text-black hover:bg-gray-50 transition text-xl rounded-full flex items-center justify-center">›</button>
                     </div>
                 </div>
 
                 <div ref={carouselRef} className="flex overflow-x-auto space-x-8 no-scrollbar snap-x pb-8 px-2">
                     {productsData.map(product => (
-                        <a key={product.id} href={`#produto/${product.id}`}>
+                        <a key={product.id} href={`#produto/${product.id}`} className="block w-80 flex-shrink-0 snap-start">
                             <ProductCard 
                                 title={product.title} 
                                 description={product.description}
                                 imageUrl={product.imageUrl}
-                                onClick={() => {}}
                             />
                         </a>
                     ))}
