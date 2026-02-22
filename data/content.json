@@ -21,5 +21,41 @@
     "subtitle": "Aproveite 15% de desconto na primeira compra.",
     "buttonText": "Subscrever",
     "bgImage": ""
+  },
+  "services_page": {
+    "title": "Os Nossos Serviços",
+    "subtitle": "Descubra como a nossa tecnologia de ponta e expertise podem transformar o seu produto.",
+    "services": [
+      {
+        "name": "Injeção de Plásticos",
+        "description": "Com um parque de máquinas moderno e versátil, oferecemos serviços de injeção de termoplásticos com a máxima precisão e eficiência. Desde peças técnicas de alta complexidade a componentes estéticos, garantimos uma produção consistente e de alta qualidade, otimizada para as necessidades do seu projeto.",
+        "portfolio": [
+          { "imageUrl": "https://picsum.photos/seed/injection-part-1/400/400", "caption": "Componente Automóvel" },
+          { "imageUrl": "https://picsum.photos/seed/injection-part-2/400/400", "caption": "Caixa Eletrónica" },
+          { "imageUrl": "https://picsum.photos/seed/injection-part-3/400/400", "caption": "Peça de Design" },
+          { "imageUrl": "https://picsum.photos/seed/injection-part-4/400/400", "caption": "Conector Técnico" }
+        ]
+      },
+      {
+        "name": "Metalização por Vácuo",
+        "description": "A nossa tecnologia de metalização por vácuo (PVD) permite-nos aplicar revestimentos metálicos finos e duráveis numa vasta gama de substratos plásticos. Oferecemos acabamentos como cromo, níquel, e outros tons metalizados, ideais para aplicações decorativas e funcionais que exigem um aspeto premium e proteção superficial.",
+        "portfolio": [
+          { "imageUrl": "https://picsum.photos/seed/pvd-finish-1/400/400", "caption": "Emblema Automóvel" },
+          { "imageUrl": "https://picsum.photos/seed/pvd-finish-2/400/400", "caption": "Componente de Eletrodoméstico" },
+          { "imageUrl": "https://picsum.photos/seed/pvd-finish-3/400/400", "caption": "Peça Decorativa" },
+          { "imageUrl": "https://picsum.photos/seed/pvd-finish-4/400/400", "caption": "Refletor de Iluminação" }
+        ]
+      },
+      {
+        "name": "Cromagem Galvânica",
+        "description": "Para aplicações que exigem a máxima resistência ao desgaste e um acabamento de alto brilho, a nossa linha de cromagem galvânica é a solução ideal. Este processo confere às peças plásticas uma camada de cromo robusta, com excelente adesão e durabilidade, cumprindo os mais rigorosos padrões da indústria automóvel e de bens de consumo.",
+        "portfolio": [
+          { "imageUrl": "https://picsum.photos/seed/chrome-part-1/400/400", "caption": "Grelha Frontal Automóvel" },
+          { "imageUrl": "https://picsum.photos/seed/chrome-part-2/400/400", "caption": "Puxador de Porta" },
+          { "imageUrl": "https://picsum.photos/seed/chrome-part-3/400/400", "caption": "Torneira e Acessórios" },
+          { "imageUrl": "https://picsum.photos/seed/chrome-part-4/400/400", "caption": "Friso Decorativo" }
+        ]
+      }
+    ]
   }
 }

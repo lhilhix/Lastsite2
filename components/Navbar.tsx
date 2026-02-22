@@ -38,7 +38,7 @@ const Navbar: React.FC<NavbarProps> = ({ onContactClick, onAdminClick }) => {
 
     const navLinks = [
         { href: "#produtos", label: "Produtos" },
-        { href: "#servicos", label: "Serviços" },
+        { href: "#servicos-detalhe", label: "Serviços" },
         { href: "#faq", label: "FAQ" },
         { href: "#catalogo", label: "Catálogo" },
         { href: "#ambiente", label: "Sustentabilidade" },

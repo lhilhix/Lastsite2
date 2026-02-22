@@ -14,6 +14,7 @@ import Modal from './components/Modal';
 import ContactForm from './components/ContactForm';
 import AdminPanel from './components/AdminPanel';
 import ChatInterface from './components/ChatInterface';
+import ServicesPage from './pages/Services';
 import { MessageCircle } from 'lucide-react';
 
 function App() {
@@ -66,6 +67,10 @@ function App() {
   const renderPage = () => {
     if (route === '#catalogo') {
       return <Catalog />;
+    }
+
+    if (route === '#servicos-detalhe') {
+        return <ServicesPage />;
     }
 
     if (route.startsWith('#produto/')) {

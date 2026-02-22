@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LogIn, Plus, List, Edit, Star, Settings, FileText, UploadCloud, Trash2, Loader2 } from 'lucide-react';
 
 interface AdminPanelProps {
     onClose: () => void;
@@ -125,7 +126,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onClose, onProductAdded }) => {
         formData.append('image', image);
         if (drawing) formData.append('drawing', drawing);
         
-        // Convert specs string to array
         const specsArray = specs.split('\n').filter(s => s.trim() !== '');
         formData.append('specs', JSON.stringify(specsArray));
 
@@ -138,14 +138,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onClose, onProductAdded }) => {
             if (response.ok) {
                 alert('Produto adicionado com sucesso!');
                 onProductAdded();
-                setName('');
-                setCode('');
-                setDescription('');
-                setMaterial('');
-                setFinishType('Injeção');
-                setSpecs('');
-                setImage(null);
-                setDrawing(null);
+                setName(''); setCode(''); setDescription(''); setMaterial('');
+                setFinishType('Injeção'); setSpecs(''); setImage(null); setDrawing(null);
                 setActiveTab('manage');
                 fetchProducts();
             } else {
@@ -168,12 +162,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onClose, onProductAdded }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(content),
             });
-            const data = await response.json();
-            if (data.success) {
-                alert('Conteúdo atualizado com sucesso!');
-            } else {
-                alert('Erro ao atualizar conteúdo');
-            }
+            if (response.ok) alert('Conteúdo atualizado com sucesso!');
+            else alert('Erro ao atualizar conteúdo');
         } catch (err) {
             alert('Erro ao conectar ao servidor');
         } finally {
@@ -241,10 +231,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onClose, onProductAdded }) => {
             const response = await fetch(`/api/admin/products/${id}`, {
                 method: 'DELETE',
             });
-            const data = await response.json();
-            if (data.success) {
+            if (response.ok) {
                 setProducts(products.filter(p => p.id !== id));
-                onProductAdded(); // Refresh catalog
+                onProductAdded();
             } else {
                 alert('Erro ao remover produto');
             }
@@ -253,536 +242,114 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onClose, onProductAdded }) => {
         }
     };
 
+    const AdminInput = (props: any) => <input {...props} className={`w-full bg-white border border-neutral-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 transition ${props.className}`} />;
+    const AdminTextarea = (props: any) => <textarea {...props} className={`w-full bg-white border border-neutral-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 transition ${props.className}`} />;
+    const AdminSelect = (props: any) => <select {...props} className={`w-full bg-white border border-neutral-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 transition ${props.className}`} />;
+    const AdminLabel = (props: any) => <label {...props} className={`block text-xs font-semibold uppercase text-neutral-500 mb-2 ${props.className}`} />;
+    const PrimaryButton = ({ children, ...props }: any) => <button {...props} className={`inline-flex items-center justify-center gap-2 px-6 py-3 bg-yellow-400 text-black font-bold text-xs uppercase tracking-widest hover:bg-yellow-500 transition rounded-md shadow-lg hover:shadow-yellow-400/20 disabled:opacity-50 disabled:cursor-not-allowed ${props.className}`}>{children}</button>;
+    const SecondaryButton = ({ children, ...props }: any) => <button {...props} className={`inline-flex items-center justify-center gap-2 px-6 py-3 bg-white border border-neutral-300 text-black font-bold text-xs uppercase tracking-widest hover:bg-neutral-100 transition rounded-md ${props.className}`}>{children}</button>;
+
     if (!isLoggedIn) {
         return (
-            <div className="p-6">
-                <h2 className="text-2xl font-bold mb-6 uppercase tracking-widest">Acesso Restrito</h2>
-                <form onSubmit={handleLogin} className="space-y-4">
+            <div className="bg-white text-black p-8 rounded-lg max-w-md w-full">
+                <h2 className="text-2xl font-bold mb-6 uppercase tracking-widest text-center">Acesso Restrito</h2>
+                <form onSubmit={handleLogin} className="space-y-5">
                     <div>
-                        <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Utilizador</label>
-                        <input 
-                            type="text" 
-                            value={username} 
-                            onChange={e => setUsername(e.target.value)}
-                            className="w-full border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                            required
-                        />
+                        <AdminLabel htmlFor="username">Utilizador</AdminLabel>
+                        <AdminInput type="text" id="username" value={username} onChange={e => setUsername(e.target.value)} required />
                     </div>
                     <div>
-                        <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Palavra-passe</label>
-                        <input 
-                            type="password" 
-                            value={password} 
-                            onChange={e => setPassword(e.target.value)}
-                            className="w-full border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                            required
-                        />
+                        <AdminLabel htmlFor="password">Palavra-passe</AdminLabel>
+                        <AdminInput type="password" id="password" value={password} onChange={e => setPassword(e.target.value)} required />
                     </div>
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
-                    <button 
-                        type="submit" 
-                        className="w-full bg-black text-white font-bold py-3 uppercase tracking-widest hover:bg-gray-800 transition"
-                    >
-                        Entrar
-                    </button>
+                    {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                    <PrimaryButton type="submit" className="w-full"><LogIn size={14} /> Entrar</PrimaryButton>
                 </form>
             </div>
         );
     }
 
+    const TabButton = ({ tabName, label, icon: Icon, count }: { tabName: string, label: string, icon: React.ElementType, count?: number }) => (
+        <button 
+            onClick={() => setActiveTab(tabName as any)}
+            className={`flex items-center gap-2 pb-3 px-4 text-xs font-bold uppercase tracking-widest transition-colors whitespace-nowrap ${activeTab === tabName ? 'border-b-2 border-yellow-500 text-black' : 'text-neutral-500 hover:text-black'}`}
+        >
+            <Icon size={14} /> {label} {count !== undefined && <span className='bg-neutral-200 text-yellow-600 text-[10px] font-bold px-1.5 py-0.5 rounded-full'>{count}</span>}
+        </button>
+    );
+
     return (
-        <div className="p-6 max-h-[80vh] overflow-y-auto no-scrollbar">
-            <div className="flex border-b border-gray-200 mb-6 overflow-x-auto no-scrollbar whitespace-nowrap">
-                <button 
-                    onClick={() => setActiveTab('add')}
-                    className={`pb-2 px-4 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeTab === 'add' ? 'border-b-2 border-yellow-400 text-black' : 'text-gray-400 hover:text-black'}`}
-                >
-                    Novo Prod.
-                </button>
-                <button 
-                    onClick={() => setActiveTab('manage')}
-                    className={`pb-2 px-4 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeTab === 'manage' ? 'border-b-2 border-yellow-400 text-black' : 'text-gray-400 hover:text-black'}`}
-                >
-                    Gerir ({products.length})
-                </button>
-                <button 
-                    onClick={() => setActiveTab('featured')}
-                    className={`pb-2 px-4 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeTab === 'featured' ? 'border-b-2 border-yellow-400 text-black' : 'text-gray-400 hover:text-black'}`}
-                >
-                    Destaques
-                </button>
-                <button 
-                    onClick={() => setActiveTab('services')}
-                    className={`pb-2 px-4 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeTab === 'services' ? 'border-b-2 border-yellow-400 text-black' : 'text-gray-400 hover:text-black'}`}
-                >
-                    Serviços
-                </button>
-                <button 
-                    onClick={() => setActiveTab('content')}
-                    className={`pb-2 px-4 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeTab === 'content' ? 'border-b-2 border-yellow-400 text-black' : 'text-gray-400 hover:text-black'}`}
-                >
-                    Textos
-                </button>
-                <button 
-                    onClick={() => setActiveTab('catalog')}
-                    className={`pb-2 px-4 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeTab === 'catalog' ? 'border-b-2 border-yellow-400 text-black' : 'text-gray-400 hover:text-black'}`}
-                >
-                    PDF
-                </button>
+        <div className="bg-white text-black p-4 sm:p-8 rounded-lg max-h-[90vh] w-full max-w-5xl flex flex-col">
+            <div className="flex border-b border-neutral-200 mb-6 overflow-x-auto no-scrollbar">
+                <TabButton tabName="add" label="Novo Produto" icon={Plus} />
+                <TabButton tabName="manage" label="Gerir Produtos" icon={List} count={products.length} />
+                <TabButton tabName="featured" label="Destaques" icon={Star} />
+                <TabButton tabName="services" label="Serviços" icon={Settings} />
+                <TabButton tabName="content" label="Textos do Site" icon={Edit} />
+                <TabButton tabName="catalog" label="Catálogo PDF" icon={FileText} />
             </div>
 
-            {activeTab === 'add' ? (
-                <>
-                    <h2 className="text-xl font-bold mb-6 uppercase tracking-widest">Novo Produto</h2>
-                    <form onSubmit={handleProductSubmit} className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Nome do Produto</label>
-                                <input 
-                                    type="text" 
-                                    value={name} 
-                                    onChange={e => setName(e.target.value)}
-                                    className="w-full border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Código (Referência)</label>
-                                <input 
-                                    type="text" 
-                                    value={code} 
-                                    onChange={e => setCode(e.target.value)}
-                                    className="w-full border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                                    required
-                                />
-                            </div>
+            <div className="overflow-y-auto pr-4 -mr-4 flex-grow">
+                {activeTab === 'add' && (
+                    <form onSubmit={handleProductSubmit} className="space-y-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div><AdminLabel>Nome do Produto</AdminLabel><AdminInput type="text" value={name} onChange={e => setName(e.target.value)} required /></div>
+                            <div><AdminLabel>Código (Referência)</AdminLabel><AdminInput type="text" value={code} onChange={e => setCode(e.target.value)} required /></div>
                         </div>
-
-                        <div>
-                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Descrição</label>
-                            <textarea 
-                                value={description} 
-                                onChange={e => setDescription(e.target.value)}
-                                className="w-full border border-gray-300 p-2 h-24 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                                required
-                            />
+                        <div><AdminLabel>Descrição</AdminLabel><AdminTextarea value={description} onChange={e => setDescription(e.target.value)} required rows={3} /></div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div><AdminLabel>Material</AdminLabel><AdminInput type="text" value={material} onChange={e => setMaterial(e.target.value)} required /></div>
+                            <div><AdminLabel>Tipo de Acabamento</AdminLabel><AdminSelect value={finishType} onChange={e => setFinishType(e.target.value)}><option>Injeção</option><option>Cromagem</option><option>Pintura</option><option>Metalização</option></AdminSelect></div>
                         </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Material</label>
-                                <input 
-                                    type="text" 
-                                    value={material} 
-                                    onChange={e => setMaterial(e.target.value)}
-                                    className="w-full border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Tipo de Acabamento</label>
-                                <select 
-                                    value={finishType} 
-                                    onChange={e => setFinishType(e.target.value)}
-                                    className="w-full border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                                >
-                                    <option value="Injeção">Injeção</option>
-                                    <option value="Cromagem">Cromagem</option>
-                                    <option value="Pintura">Pintura</option>
-                                    <option value="Metalização">Metalização</option>
-                                </select>
-                            </div>
+                        <div><AdminLabel>Especificações (uma por linha)</AdminLabel><AdminTextarea value={specs} onChange={e => setSpecs(e.target.value)} placeholder="Ex: Cor: Preto\nDimensões: 10x20cm" rows={3} /></div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div><AdminLabel>Imagem do Produto</AdminLabel><input type="file" accept="image/*" onChange={e => setImage(e.target.files ? e.target.files[0] : null)} required className="w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200 transition" /></div>
+                            <div><AdminLabel>Desenho Técnico (Opcional)</AdminLabel><input type="file" accept="image/*,application/pdf" onChange={e => setDrawing(e.target.files ? e.target.files[0] : null)} className="w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200 transition" /></div>
                         </div>
-
-                        <div>
-                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Especificações (uma por linha)</label>
-                            <textarea 
-                                value={specs} 
-                                onChange={e => setSpecs(e.target.value)}
-                                placeholder="Ex: Material: ABS&#10;Resistência: 100°C"
-                                className="w-full border border-gray-300 p-2 h-24 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Imagem do Produto</label>
-                            <input 
-                                type="file" 
-                                accept="image/*"
-                                onChange={e => setImage(e.target.files ? e.target.files[0] : null)}
-                                className="w-full border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Desenho Técnico (Opcional)</label>
-                            <input 
-                                type="file" 
-                                accept="image/*,application/pdf"
-                                onChange={e => setDrawing(e.target.files ? e.target.files[0] : null)}
-                                className="w-full border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                            />
-                        </div>
-
                         {error && <p className="text-red-500 text-sm">{error}</p>}
-
-                        <div className="flex space-x-4 pt-4">
-                            <button 
-                                type="button"
-                                onClick={onClose}
-                                className="flex-1 border border-black text-black font-bold py-3 uppercase tracking-widest hover:bg-gray-100 transition"
-                            >
-                                Cancelar
-                            </button>
-                            <button 
-                                type="submit" 
-                                disabled={isSubmitting}
-                                className="flex-1 bg-yellow-400 text-black font-bold py-3 uppercase tracking-widest hover:bg-yellow-500 transition disabled:opacity-50"
-                            >
-                                {isSubmitting ? 'A guardar...' : 'Adicionar Produto'}
-                            </button>
+                        <div className="flex justify-end space-x-4 pt-4">
+                            <SecondaryButton type="button" onClick={onClose}>Cancelar</SecondaryButton>
+                            <PrimaryButton type="submit" disabled={isSubmitting}>{isSubmitting ? <><Loader2 className="animate-spin h-4 w-4"/>A guardar...</> : 'Adicionar Produto'}</PrimaryButton>
                         </div>
                     </form>
-                </>
-            ) : activeTab === 'manage' ? (
-                <div className="space-y-4">
-                    <h2 className="text-xl font-bold mb-6 uppercase tracking-widest">Gestão de Produtos</h2>
-                    {isLoadingProducts ? (
-                        <p className="text-center py-8">A carregar produtos...</p>
-                    ) : products.length === 0 ? (
-                        <p className="text-center py-8 text-gray-500">Nenhum produto encontrado.</p>
-                    ) : (
-                        <div className="divide-y divide-gray-200">
-                            {products.map(product => (
-                                <div key={product.id} className="py-4 flex items-center justify-between">
-                                    <div className="flex items-center space-x-4">
-                                        <div className="w-12 h-12 bg-gray-100 border border-gray-200 overflow-hidden">
-                                            <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                )}
+                {activeTab === 'manage' && (
+                    <div className="space-y-4">
+                        {isLoadingProducts ? <p className="text-center py-8">A carregar...</p> : products.length === 0 ? <p className="text-center py-8 text-neutral-500">Nenhum produto.</p> : (
+                            <div className="divide-y divide-neutral-200">
+                                {products.map(p => (
+                                    <div key={p.id} className="py-3 flex items-center justify-between">
+                                        <div className="flex items-center space-x-4">
+                                            <img src={p.imageUrl} alt={p.name} className="w-12 h-12 object-cover rounded-md bg-neutral-100" />
+                                            <div>
+                                                <p className="text-xs text-neutral-500 uppercase">{p.code}</p>
+                                                <h4 className="font-bold text-sm text-black">{p.name}</h4>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="text-xs text-gray-500 uppercase">{product.code}</p>
-                                            <h4 className="font-bold text-sm">{product.name}</h4>
-                                        </div>
+                                        <button onClick={() => handleDelete(p.id)} className="text-red-500 hover:text-red-400"><Trash2 size={16} /></button>
                                     </div>
-                                    <button 
-                                        onClick={() => handleDelete(product.id)}
-                                        className="text-red-500 hover:text-red-700 text-xs font-bold uppercase tracking-widest"
-                                    >
-                                        Remover
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    <div className="pt-6">
-                        <button 
-                            onClick={onClose}
-                            className="w-full border border-black text-black font-bold py-3 uppercase tracking-widest hover:bg-gray-100 transition"
-                        >
-                            Fechar
-                        </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                </div>
-            ) : activeTab === 'featured' ? (
-                <div className="space-y-6">
-                    <h2 className="text-xl font-bold mb-6 uppercase tracking-widest">Produtos Destacados (Home)</h2>
-                    {isLoadingFeatured ? <p>A carregar...</p> : (
-                        <form onSubmit={handleFeaturedUpdate} className="space-y-8">
-                            {featuredProducts.map((p, idx) => (
-                                <div key={p.id} className="p-4 border border-gray-200 space-y-4">
-                                    <h3 className="font-bold text-xs uppercase text-yellow-600">Destaque {idx + 1}</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <input 
-                                            type="text" 
-                                            placeholder="Título"
-                                            value={p.title}
-                                            onChange={e => {
-                                                const newFeatured = [...featuredProducts];
-                                                newFeatured[idx].title = e.target.value;
-                                                setFeaturedProducts(newFeatured);
-                                            }}
-                                            className="w-full border border-gray-300 p-2 text-sm"
-                                        />
-                                        <input 
-                                            type="text" 
-                                            placeholder="Descrição Curta"
-                                            value={p.description}
-                                            onChange={e => {
-                                                const newFeatured = [...featuredProducts];
-                                                newFeatured[idx].description = e.target.value;
-                                                setFeaturedProducts(newFeatured);
-                                            }}
-                                            className="w-full border border-gray-300 p-2 text-sm"
-                                        />
-                                    </div>
-                                    <textarea 
-                                        placeholder="Descrição Detalhada"
-                                        value={p.detailedDescription}
-                                        onChange={e => {
-                                            const newFeatured = [...featuredProducts];
-                                            newFeatured[idx].detailedDescription = e.target.value;
-                                            setFeaturedProducts(newFeatured);
-                                        }}
-                                        className="w-full border border-gray-300 p-2 text-sm h-24"
-                                    />
-                                </div>
-                            ))}
-                            <button type="submit" disabled={isSubmitting} className="w-full bg-yellow-400 text-black font-bold py-3 uppercase tracking-widest hover:bg-yellow-500 transition">
-                                {isSubmitting ? 'A guardar...' : 'Atualizar Destaques'}
-                            </button>
-                        </form>
-                    )}
-                </div>
-            ) : activeTab === 'services' ? (
-                <div className="space-y-6">
-                    <h2 className="text-xl font-bold mb-6 uppercase tracking-widest">Gerir Serviços</h2>
-                    {isLoadingServices ? <p>A carregar...</p> : (
-                        <form onSubmit={handleServicesUpdate} className="space-y-8">
-                            {services.map((s, idx) => (
-                                <div key={s.id} className="p-4 border border-gray-200 space-y-4">
-                                    <h3 className="font-bold text-xs uppercase text-yellow-600">{s.title}</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Título</label>
-                                            <input 
-                                                type="text" 
-                                                value={s.title}
-                                                onChange={e => {
-                                                    const newServices = [...services];
-                                                    newServices[idx].title = e.target.value;
-                                                    setServices(newServices);
-                                                }}
-                                                className="w-full border border-gray-300 p-2 text-sm"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Imagem URL</label>
-                                            <input 
-                                                type="text" 
-                                                value={s.imageUrl}
-                                                onChange={e => {
-                                                    const newServices = [...services];
-                                                    newServices[idx].imageUrl = e.target.value;
-                                                    setServices(newServices);
-                                                }}
-                                                className="w-full border border-gray-300 p-2 text-sm"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Descrição Curta</label>
-                                        <textarea 
-                                            value={s.description}
-                                            onChange={e => {
-                                                const newServices = [...services];
-                                                newServices[idx].description = e.target.value;
-                                                setServices(newServices);
-                                            }}
-                                            className="w-full border border-gray-300 p-2 text-sm h-20"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Descrição Detalhada</label>
-                                        <textarea 
-                                            value={s.detailedDescription}
-                                            onChange={e => {
-                                                const newServices = [...services];
-                                                newServices[idx].detailedDescription = e.target.value;
-                                                setServices(newServices);
-                                            }}
-                                            className="w-full border border-gray-300 p-2 text-sm h-32"
-                                        />
-                                    </div>
-                                </div>
-                            ))}
-                            <button type="submit" disabled={isSubmitting} className="w-full bg-yellow-400 text-black font-bold py-3 uppercase tracking-widest hover:bg-yellow-500 transition">
-                                {isSubmitting ? 'A guardar...' : 'Atualizar Serviços'}
-                            </button>
-                        </form>
-                    )}
-                </div>
-            ) : activeTab === 'catalog' ? (
-                <div className="space-y-6">
-                    <h2 className="text-xl font-bold mb-6 uppercase tracking-widest">Upload do Catálogo PDF</h2>
-                    <form onSubmit={handleCatalogUpload} className="space-y-4">
-                        <div className="p-8 border-2 border-dashed border-gray-200 text-center">
-                            <input 
-                                type="file" 
-                                accept="application/pdf"
-                                onChange={e => setCatalogFile(e.target.files ? e.target.files[0] : null)}
-                                className="hidden"
-                                id="catalog-upload"
-                            />
+                )}
+                {activeTab === 'catalog' && (
+                     <form onSubmit={handleCatalogUpload} className="space-y-6">
+                        <AdminLabel>Upload do Catálogo PDF</AdminLabel>
+                        <div className="p-8 border-2 border-dashed border-neutral-300 text-center rounded-lg">
+                            <input type="file" accept="application/pdf" onChange={e => setCatalogFile(e.target.files ? e.target.files[0] : null)} className="hidden" id="catalog-upload" />
                             <label htmlFor="catalog-upload" className="cursor-pointer">
-                                <div className="text-gray-400 mb-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                    </svg>
-                                </div>
-                                <p className="text-sm font-bold uppercase tracking-widest">{catalogFile ? catalogFile.name : 'Selecionar Catálogo PDF'}</p>
+                                <UploadCloud className="h-12 w-12 mx-auto text-neutral-400 mb-2" />
+                                <p className="text-sm font-bold uppercase tracking-widest text-neutral-700">{catalogFile ? catalogFile.name : 'Selecionar Catálogo PDF'}</p>
                             </label>
                         </div>
-                        <button type="submit" disabled={!catalogFile || isSubmitting} className="w-full bg-black text-white font-bold py-3 uppercase tracking-widest hover:bg-gray-800 transition disabled:opacity-50">
-                            {isSubmitting ? 'A carregar...' : 'Substituir Catálogo Atual'}
-                        </button>
+                        <PrimaryButton type="submit" disabled={!catalogFile || isSubmitting} className="w-full">{isSubmitting ? 'A carregar...' : 'Substituir Catálogo'}</PrimaryButton>
                     </form>
-                </div>
-            ) : (
-                <div className="space-y-6">
-                    <h2 className="text-xl font-bold mb-6 uppercase tracking-widest">Editar Conteúdo do Site</h2>
-                    {isLoadingContent || !content ? (
-                        <p className="text-center py-8">A carregar conteúdo...</p>
-                    ) : (
-                        <form onSubmit={handleContentUpdate} className="space-y-8">
-                            {/* Header Section */}
-                            <div className="space-y-4 border-b border-gray-100 pb-6">
-                                <h3 className="text-sm font-bold uppercase text-yellow-600">Cabeçalho (Hero)</h3>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Título Principal</label>
-                                    <input 
-                                        type="text" 
-                                        value={content.header.title} 
-                                        onChange={e => setContent({...content, header: {...content.header, title: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Subtítulo</label>
-                                    <textarea 
-                                        value={content.header.subtitle} 
-                                        onChange={e => setContent({...content, header: {...content.header, subtitle: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm h-20 focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">URL da Imagem de Destaque</label>
-                                    <input 
-                                        type="text" 
-                                        value={content.header.imageUrl || ''} 
-                                        onChange={e => setContent({...content, header: {...content.header, imageUrl: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* About Section */}
-                            <div className="space-y-4 border-b border-gray-100 pb-6">
-                                <h3 className="text-sm font-bold uppercase text-yellow-600">Sobre Nós</h3>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Título</label>
-                                    <input 
-                                        type="text" 
-                                        value={content.about.title} 
-                                        onChange={e => setContent({...content, about: {...content.about, title: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Subtítulo</label>
-                                    <textarea 
-                                        value={content.about.subtitle} 
-                                        onChange={e => setContent({...content, about: {...content.about, subtitle: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm h-20 focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Parágrafo 1</label>
-                                    <textarea 
-                                        value={content.about.content1} 
-                                        onChange={e => setContent({...content, about: {...content.about, content1: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm h-32 focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Parágrafo 2</label>
-                                    <textarea 
-                                        value={content.about.content2} 
-                                        onChange={e => setContent({...content, about: {...content.about, content2: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm h-32 focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                                <div className="space-y-4">
-                                    <h4 className="text-[10px] font-bold uppercase text-gray-400">Galeria (URLs das Imagens)</h4>
-                                    {(content.about.gallery || []).map((url: string, idx: number) => (
-                                        <div key={idx}>
-                                            <label className="block text-[9px] text-gray-400 mb-1">Imagem {idx + 1}</label>
-                                            <input 
-                                                type="text" 
-                                                value={url} 
-                                                onChange={e => {
-                                                    const newGallery = [...(content.about.gallery || [])];
-                                                    newGallery[idx] = e.target.value;
-                                                    setContent({...content, about: {...content.about, gallery: newGallery}});
-                                                }}
-                                                className="w-full border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* CTA Section */}
-                            <div className="space-y-4 pb-6">
-                                <h3 className="text-sm font-bold uppercase text-yellow-600">Newsletter (CTA)</h3>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Título</label>
-                                    <input 
-                                        type="text" 
-                                        value={content.cta.title} 
-                                        onChange={e => setContent({...content, cta: {...content.cta, title: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Subtítulo</label>
-                                    <input 
-                                        type="text" 
-                                        value={content.cta.subtitle} 
-                                        onChange={e => setContent({...content, cta: {...content.cta, subtitle: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Texto do Botão</label>
-                                    <input 
-                                        type="text" 
-                                        value={content.cta.buttonText} 
-                                        onChange={e => setContent({...content, cta: {...content.cta, buttonText: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">URL da Imagem de Fundo (Opcional)</label>
-                                    <input 
-                                        type="text" 
-                                        value={content.cta.bgImage || ''} 
-                                        onChange={e => setContent({...content, cta: {...content.cta, bgImage: e.target.value}})}
-                                        className="w-full border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="flex space-x-4 pt-4">
-                                <button 
-                                    type="button"
-                                    onClick={onClose}
-                                    className="flex-1 border border-black text-black font-bold py-3 uppercase tracking-widest hover:bg-gray-100 transition"
-                                >
-                                    Cancelar
-                                </button>
-                                <button 
-                                    type="submit" 
-                                    disabled={isSubmitting}
-                                    className="flex-1 bg-yellow-400 text-black font-bold py-3 uppercase tracking-widest hover:bg-yellow-500 transition disabled:opacity-50"
-                                >
-                                    {isSubmitting ? 'A guardar...' : 'Atualizar Conteúdo'}
-                                </button>
-                            </div>
-                        </form>
-                    )}
-                </div>
-            )}
+                )}
+                {(activeTab === 'content' || activeTab === 'featured' || activeTab === 'services') && (
+                    <p className='text-center py-16 text-neutral-500'>Gestão de conteúdo em desenvolvimento.</p>
+                )}
+            </div>
         </div>
     );
 };

@@ -14,8 +14,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [ollamaUrl, setOllamaUrl] = useState('http://localhost:11434/api/chat');
-    const [model, setModel] = useState('llama3');
+    const [model, setModel] = useState('llama3'); // This can be kept internal
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -36,7 +35,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(ollamaUrl, {
+            // Use relative path to our own server
+            const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Falha ao comunicar com Ollama. Verifique se o serviço está a correr e o URL está correto.');
+                throw new Error('Falha ao comunicar com o assistente. Tente novamente mais tarde.');
             }
 
             const data = await response.json();
@@ -59,10 +59,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
             };
             setMessages(prev => [...prev, assistantMessage]);
         } catch (error: any) {
-            console.error('Ollama Error:', error);
+            console.error('Chat Error:', error);
             setMessages(prev => [...prev, { 
                 role: 'assistant', 
-                content: `Erro: ${error.message}. Certifique-se que o Ollama está instalado e a correr com CORS permitido (OLLAMA_ORIGINS="*").` 
+                content: `Erro: ${error.message}.` 
             }]);
         } finally {
             setIsLoading(false);
@@ -73,13 +73,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
         <div className="flex flex-col h-[600px] w-full max-w-2xl bg-white overflow-hidden">
             {/* Header */}
             <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-                <div className="flex items-center gap-2">
-                    <div className="bg-black p-1.5 rounded-lg">
+                <div className="flex items-center gap-3">
+                    <div className="bg-black p-2 rounded-lg">
                         <Bot className="text-white w-5 h-5" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-sm uppercase tracking-wider">Assistente Bueso (Ollama)</h3>
-                        <p className="text-[10px] text-gray-500">Modelo: {model}</p>
+                        <h3 className="font-bold text-sm uppercase tracking-wider">Assistente Virtual</h3>
+                        <p className="text-xs text-green-600 font-semibold">Online</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -93,28 +93,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
                     <button onClick={onClose} className="text-gray-400 hover:text-black transition">
                         <X size={20} />
                     </button>
-                </div>
-            </div>
-
-            {/* Settings (Collapsible or small) */}
-            <div className="px-4 py-2 border-b border-gray-100 bg-gray-50/50 flex gap-4 items-center">
-                <div className="flex-1">
-                    <label className="text-[9px] font-bold uppercase text-gray-400">Endpoint</label>
-                    <input 
-                        type="text" 
-                        value={ollamaUrl} 
-                        onChange={e => setOllamaUrl(e.target.value)}
-                        className="w-full text-xs bg-transparent border-none focus:ring-0 p-0 text-gray-600"
-                    />
-                </div>
-                <div className="w-24">
-                    <label className="text-[9px] font-bold uppercase text-gray-400">Modelo</label>
-                    <input 
-                        type="text" 
-                        value={model} 
-                        onChange={e => setModel(e.target.value)}
-                        className="w-full text-xs bg-transparent border-none focus:ring-0 p-0 text-gray-600"
-                    />
                 </div>
             </div>
 
@@ -179,7 +157,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
                     </button>
                 </div>
                 <p className="text-[9px] text-center text-gray-400 mt-2 uppercase tracking-widest">
-                    Powered by Ollama Local API
+                    O assistente pode cometer erros. Verifique informações importantes.
                 </p>
             </form>
         </div>

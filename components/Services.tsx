@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Modal from './Modal';
 import type { Service } from '../data/servicesData';
 
-
 const InjectionIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -31,12 +30,12 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description, onDetailsClick }) => (
-    <div className="bg-neutral-100 p-8 h-full flex flex-col group border-2 border-transparent hover:border-yellow-400 transition-all duration-300">
+    <div className="bg-white border border-neutral-200 p-8 h-full flex flex-col group hover:border-yellow-400 transition-all duration-300 rounded-lg">
         <div className="mb-6 text-yellow-400">
             {icon}
         </div>
         <h3 className="text-xl font-bold mb-3 text-black">{title}</h3>
-        <p className="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">{description}</p>
+        <p className="text-neutral-500 text-sm mb-6 flex-grow leading-relaxed">{description}</p>
         
         <button 
             onClick={onDetailsClick} 
@@ -79,11 +78,11 @@ const Services: React.FC<ServicesProps> = ({ onContactClick }) => {
 
     return (
         <>
-        <section id="servicos" className="py-24 px-6 bg-neutral-50">
+        <section id="servicos" className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
-                     <h2 className="text-3xl font-bold mb-3 text-black">Serviços de Precisão</h2>
-                     <p className="text-gray-600 max-w-2xl mx-auto">Do molde à peça final, garantimos qualidade e acabamentos de excelência que elevam o seu produto.</p>
+                     <h2 className="text-3xl md:text-4xl font-bold mb-3 text-black">Serviços de Precisão</h2>
+                     <p className="text-neutral-500 max-w-2xl mx-auto">Do molde à peça final, garantimos qualidade e acabamentos de excelência que elevam o seu produto.</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {servicesData.map(service => (
@@ -95,10 +94,10 @@ const Services: React.FC<ServicesProps> = ({ onContactClick }) => {
                             onDetailsClick={() => setSelectedService(service)}
                         />
                     ))}
-                    <div className="bg-black p-8 h-full flex flex-col justify-center items-center text-center border-2 border-yellow-400/50 hover:border-yellow-400 transition-colors duration-300 lg:col-span-2">
+                    <div className="bg-black p-8 h-full flex flex-col justify-center items-center text-center border-2 border-yellow-400/50 hover:border-yellow-400 transition-colors duration-300 rounded-lg lg:col-span-2">
                         <h3 className="text-xl font-bold mb-3 text-white">Tem um Projeto Específico?</h3>
-                        <p className="text-gray-400 text-sm mb-6">A nossa equipa técnica está pronta para analisar os seus requisitos e propor a melhor solução.</p>
-                        <button onClick={onContactClick} className="w-fit px-8 py-3 bg-yellow-400 text-black font-bold text-xs uppercase hover:bg-yellow-500 transition shadow-md">Fale Connosco</button>
+                        <p className="text-neutral-400 text-sm mb-6">A nossa equipa técnica está pronta para analisar os seus requisitos e propor a melhor solução.</p>
+                        <button onClick={onContactClick} className="w-fit px-8 py-3 bg-yellow-400 text-black font-bold text-xs uppercase hover:bg-yellow-500 transition shadow-md rounded-md">Fale Connosco</button>
                     </div>
                 </div>
             </div>
@@ -106,7 +105,7 @@ const Services: React.FC<ServicesProps> = ({ onContactClick }) => {
         <Modal isOpen={!!selectedService} onClose={() => setSelectedService(null)} size="lg">
             {selectedService && (
                  <div className="p-4">
-                    <div className="aspect-video bg-gray-100 mb-6">
+                    <div className="aspect-video bg-neutral-100 mb-6 rounded-lg overflow-hidden">
                         <img 
                             src={(selectedService as any).imageUrl || 'https://picsum.photos/seed/service/800/450'} 
                             alt={selectedService.title}
@@ -116,20 +115,20 @@ const Services: React.FC<ServicesProps> = ({ onContactClick }) => {
                         />
                     </div>
                     <h2 className="text-2xl font-bold mb-2 text-black">{selectedService.title}</h2>
-                    <p className="text-gray-600 mb-6 leading-relaxed">{selectedService.detailedDescription}</p>
+                    <p className="text-neutral-600 mb-6 leading-relaxed">{selectedService.detailedDescription}</p>
                     
-                    <div className="bg-neutral-100 border border-neutral-200 p-6 space-y-4 text-sm">
+                    <div className="bg-neutral-50 border border-neutral-200 p-6 space-y-4 text-sm rounded-lg">
                         <div>
-                            <h4 className="font-semibold uppercase tracking-wider mb-2 text-gray-500">Aplicações Comuns</h4>
-                            <p className="text-gray-700">{selectedService.applications.join(', ')}.</p>
+                            <h4 className="font-semibold uppercase tracking-wider mb-2 text-neutral-500">Aplicações Comuns</h4>
+                            <p className="text-neutral-700">{selectedService.applications.join(', ')}.</p>
                         </div>
                          <div>
-                            <h4 className="font-semibold uppercase tracking-wider mb-2 text-gray-500">Materiais</h4>
-                            <p className="text-gray-700">{selectedService.materials}</p>
+                            <h4 className="font-semibold uppercase tracking-wider mb-2 text-neutral-500">Materiais</h4>
+                            <p className="text-neutral-700">{selectedService.materials}</p>
                         </div>
                         <div>
-                            <h4 className="font-semibold uppercase tracking-wider mb-2 text-gray-500">Benefícios Chave</h4>
-                            <p className="text-gray-700">{selectedService.benefits}</p>
+                            <h4 className="font-semibold uppercase tracking-wider mb-2 text-neutral-500">Benefícios Chave</h4>
+                            <p className="text-neutral-700">{selectedService.benefits}</p>
                         </div>
                     </div>
                 </div>
