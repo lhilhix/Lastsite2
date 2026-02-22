@@ -1,0 +1,25 @@
+{
+  "header": {
+    "title": "Injetor e Acabamentos \nPremium em Braga",
+    "subtitle": "Soluções integradas de metalização e pintura para a indústria exigente.",
+    "imageUrl": "https://picsum.photos/seed/bueso-chair/800/1000"
+  },
+  "about": {
+    "title": "A Nossa História de Precisão",
+    "subtitle": "Fundada no coração industrial de Braga, a nossa paixão é transformar polímeros em componentes de alta performance.",
+    "content1": "Desde a nossa fundação, a Plásticos Bueso tem sido um pilar de inovação e qualidade na indústria de injeção de plásticos. Nascemos com a missão de fornecer soluções técnicas para os setores mais exigentes, com um foco especial na indústria automóvel.",
+    "content2": "A nossa filosofia assenta em três pilares: precisão absoluta, tecnologia de ponta e uma parceria próxima com os nossos clientes. Cada peça que produzimos é o resultado de um processo meticuloso, desde a seleção do material até ao acabamento final, seja ele uma metalização sofisticada ou uma cromagem de elevada resistência.",
+    "gallery": [
+      "https://picsum.photos/seed/old-factory/400/400",
+      "https://picsum.photos/seed/first-machine/400/400",
+      "https://picsum.photos/seed/founding-team/400/400",
+      "https://picsum.photos/seed/early-product/400/400"
+    ]
+  },
+  "cta": {
+    "title": "SUBSCREVA A NEWSLETTER",
+    "subtitle": "Aproveite 15% de desconto na primeira compra.",
+    "buttonText": "Subscrever",
+    "bgImage": ""
+  }
+}
